@@ -1,0 +1,108 @@
+services:
+
+  booking-mysql:
+    image: mysql:8.0
+    container_name: booking-db
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_DATABASE: Booking-service
+      MYSQL_ROOT_PASSWORD: ${BOOKING_DB_ROOT_PASS}
+      MYSQL_USER: ${BOOKING_DB_USER}
+      MYSQL_PASSWORD: ${BOOKING_DB_PASS}
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-P", "3306", "--protocol=tcp"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - booking_mysql_data:/var/lib/mysql
+
+  booking-service:
+    build: .
+    container_name: booking-service
+    ports:
+      - "8082:8082"
+    environment:
+      JWT_SECRET: ${JWT_SECRET}
+      SPRING_DATASOURCE_URL: jdbc:mysql://booking-mysql:3306/Booking-service
+      SPRING_DATASOURCE_USERNAME: ${BOOKING_DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${BOOKING_DB_PASS}
+    depends_on:
+      booking-mysql:
+        condition: service_healthy
+
+#-----------------------------------------------------------------
+
+  customer-mysql:
+    image: mysql:8.0
+    container_name: customer-db
+    ports:
+      - "3308:3306"
+    environment:
+      MYSQL_DATABASE: Customer-service
+      MYSQL_ROOT_PASSWORD: ${CUSTOMER_DB_ROOT_PASS}
+      MYSQL_USER: ${CUSTOMER_DB_USER}
+      MYSQL_PASSWORD: ${CUSTOMER_DB_PASS}
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-P", "3306", "--protocol=tcp"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - customer_mysql_data:/var/lib/mysql
+
+  customer-service:
+    image: beatasp/booking-system-customer:latest
+    container_name: customer-service
+    ports:
+      - "8081:8081"
+    environment:
+      JWT_SECRET: ${JWT_SECRET}
+      SPRING_DATASOURCE_URL: jdbc:mysql://customer-mysql:3306/Customer-service
+      SPRING_DATASOURCE_USERNAME: ${CUSTOMER_DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${CUSTOMER_DB_PASS}
+    depends_on:
+      customer-mysql:
+        condition: service_healthy
+
+#-----------------------------------------------------------------
+
+  review-db:
+    image: mysql:8.0
+    container_name: review-db
+    ports:
+      - "3309:3306"
+    environment:
+      MYSQL_DATABASE: Review-service #Sets the database's name. (what the Schema has for name)
+      MYSQL_ROOT_PASSWORD: ${REVIEW_DB_ROOT_PASS} #Sets root password.
+      MYSQL_USER: ${REVIEW_DB_USER} #Sets what user to create.
+      MYSQL_PASSWORD: ${REVIEW_DB_PASS} #Sets what password to use for created user.
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-P", "3306", "--protocol=tcp"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - review_mysql_data:/var/lib/mysql
+
+  review-service:
+    image: sleepingfores7s/booking-review:latest #What image to use/pull from (Either Local or Remotely)
+    container_name: review-service #What the created container's name will be.
+    ports: #What port(s) the container will use.
+      - "8083:8083"
+    environment: #Environment variables, what variables the program would need once it starts in docker.
+      JWT_SECRET: ${JWT_SECRET}
+      SPRING_DATASOURCE_URL: jdbc:mysql://review-db:3306/Review-service #URL to the created MySQL database schema.
+      SPRING_DATASOURCE_USERNAME: ${REVIEW_DB_USER} #Username for the database, needs to be the name as the databases chosen user
+      SPRING_DATASOURCE_PASSWORD: ${REVIEW_DB_PASS} #Password for the database, needs to be the same as the databases chosen password
+    depends_on: #Makes the container rely on another container being present.
+      review-db: #Chosen container that needs to be present.
+        condition: service_healthy #What status the relied upon container needs to have before this container starts running.
+
+#-----------------------------------------------------------------
+
+volumes:
+  booking_mysql_data:
+  customer_mysql_data:
+  review_mysql_data:
