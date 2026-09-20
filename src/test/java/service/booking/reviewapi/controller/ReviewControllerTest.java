@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(properties = {
-        "spring.datasource.url=jdbc:mysql://localhost:3307/Booking-service", //Only for booking test to be able to connect to its db, or it crashes
+        "spring.datasource.url=jdbc:mysql://localhost:3306/Booking-service", //Only for booking test to be able to connect to its db, or it crashes
         "spring.datasource.username=booking_user", //Only for booking test to be able to connect to its db, or it crashes
         "spring.datasource.password=booking_password", //Only for booking test to be able to connect to its db, or it crashes
         "REVIEW_DB_CLIENT_URL=http://localhost:8083",

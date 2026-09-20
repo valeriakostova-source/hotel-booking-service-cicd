@@ -35,6 +35,8 @@ class ConnectionControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+
+
     @Value("${JWT_SECRET}")
     private String JWT_SECRET;
 

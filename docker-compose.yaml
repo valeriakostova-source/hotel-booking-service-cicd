@@ -19,7 +19,7 @@ services:
       - booking_mysql_data:/var/lib/mysql
 
   booking-service:
-    build: .
+    image: valeriakostova/booking-service-cicd:latest
     container_name: booking-service
     ports:
       - "8082:8082"
@@ -53,7 +53,7 @@ services:
       - customer_mysql_data:/var/lib/mysql
 
   customer-service:
-    image: beatasp/booking-system-customer:latest
+    image: valeriakostova/customer-service-cicd:latest
     container_name: customer-service
     ports:
       - "8081:8081"
@@ -87,7 +87,7 @@ services:
       - review_mysql_data:/var/lib/mysql
 
   review-service:
-    image: sleepingfores7s/booking-review:latest #What image to use/pull from (Either Local or Remotely)
+    image: valeriakostova/review-service-cicd:latest #What image to use/pull from (Either Local or Remotely)
     container_name: review-service #What the created container's name will be.
     ports: #What port(s) the container will use.
       - "8083:8083"
