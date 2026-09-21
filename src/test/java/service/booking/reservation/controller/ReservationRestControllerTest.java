@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "spring.datasource.password=",
         "JWT_SECRET=SNtP0ZcKL8Co2T3UdVBJta5W1hWRMcku55tHGtkeVTD"})
 @AutoConfigureMockMvc
-public class ReservationRestControllerIT {
+public class ReservationRestControllerTest {
 
     @MockitoBean
     private CustomerClient customerClient;
