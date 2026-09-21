@@ -2,6 +2,7 @@ package service.booking.reservation.controller;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,17 +20,12 @@ import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(properties = {
-        "spring.datasource.url=jdbc:h2:mem:Booking-service;MODE=MYSQL",
-        "spring.datasource.username=sa",
-        "spring.datasource.password=",
-        "JWT_SECRET=SNtP0ZcKL8Co2T3UdVBJta5W1hWRMcku55tHGtkeVTD"})
+@SpringBootTest
 @AutoConfigureMockMvc
 public class ReservationRestControllerTest {
 
@@ -44,6 +40,11 @@ public class ReservationRestControllerTest {
 
     @Value("${JWT_SECRET}")
     private String SECRET_KEY;
+
+    @BeforeEach
+    public void cleanupDb() {
+        roomRepository.deleteAll();
+    }
 
     @Test
     public void createReservationTest() throws Exception {

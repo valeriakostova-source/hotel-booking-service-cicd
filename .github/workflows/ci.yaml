@@ -10,6 +10,20 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: Booking-service
+        ports:
+          - 3306:3306
+        options:
+          --health-cmd="mysqladmin ping -h localhost -uroot -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retires=10
+
     steps:
       #Checkout code
       - name: Check out code
@@ -22,4 +36,12 @@ jobs:
           cache: "maven"
 
       - name: Build and run tests
-        run: mvn -B package
+        run: mvn -B test
+
+      - name: Build and run tests
+        run: mvn -B package -DskipTests
+        env:
+          SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/Booking-service
+          SPRING_DATASOURCE_USERNAME: root
+          SPRING_DATASOURCE_PASSWORD: root
+          JWT_SECRET: SNtP0ZcKL8Co2T3UdVBJta5W1hWRMcku55tHGtkeVTD
