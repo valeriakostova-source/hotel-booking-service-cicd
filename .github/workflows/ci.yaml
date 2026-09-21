@@ -42,6 +42,6 @@ jobs:
         run: mvn -B package -DskipTests
         env:
           SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/Booking-service
-          SPRING_DATASOURCE_USERNAME: root
-          SPRING_DATASOURCE_PASSWORD: root
+          BOOKING_DB_USER: root
+          BOOKING_DB_PASS: root
           JWT_SECRET: SNtP0ZcKL8Co2T3UdVBJta5W1hWRMcku55tHGtkeVTD
