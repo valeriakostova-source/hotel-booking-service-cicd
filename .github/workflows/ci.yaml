@@ -7,8 +7,17 @@ on:
 
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  valeriatester:
+    runs-on: ${{matrix.os
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        java: [17,21]
+        include:
+          - os: macos-latest
+            java: 21
+
 
     services:
       mysql:
