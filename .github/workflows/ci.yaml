@@ -32,6 +32,16 @@ jobs:
           --health-retries=10
 
     steps:
+      #Docker compose starts
+      - name: Start docker system
+        run: docker compose up -d --build
+      - name: Sleep 30 s
+        run: sleep 30
+      - name: test endpoint i booking service
+        run: curl - f http://localhost:8082/reservation
+      - name: shut down all
+        if: always()
+        run: docker compose dom -v
       #Checkout code
       - name: Check out code
         uses: actions/checkout@v4
