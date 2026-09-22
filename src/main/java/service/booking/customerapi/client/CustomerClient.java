@@ -1,5 +1,6 @@
 package service.booking.customerapi.client;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import service.booking.exceptionhandler.customexeptions.ExternalServiceConnectionException;
@@ -9,9 +10,9 @@ public class CustomerClient {
 
     private final RestClient restClient;
 
-    public CustomerClient() {
+    public CustomerClient(@Value("${CUSTOMER_CLIENT_URL:http://customer-service:8081}") String baseUrl) {
         this.restClient = RestClient.builder()
-                .baseUrl("http://customer-service:8081")
+                .baseUrl(baseUrl)
                 .build();
     }
 
