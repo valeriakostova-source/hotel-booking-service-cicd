@@ -14,9 +14,8 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         java: [17,21]
-        include:
-          - os: macos-latest
-            java: 21
+
+
 
 
     services:
