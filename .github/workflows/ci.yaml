@@ -23,8 +23,8 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: ${{secrets.MYSQL_ROOT_PASSWORD}}
           MYSQL_DATABASE: ${{secrets.MYSQL_DATABASE}}
-          MYSQL_USER: ${{secrets.BOOKING_DB_USER}}
-          MYSQL_PASSWORD: ${{secrets.BOOKING_DB_PASS}}
+          MYSQL_USER: ${{secrets.MYSQL_USER}}
+          MYSQL_PASSWORD: ${{secrets.MYSQL_PASSWORD}}
         ports:
           - 3306:3306
         options:
@@ -49,11 +49,10 @@ jobs:
       - name: Build and run tests
         run: mvn -B package
         env:
-            MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
-            MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
-            MYSQL_USER: ${{ secrets.BOOKING_DB_USER }}
-            MYSQL_PASSWORD: ${{ secrets.BOOKING_DB_PASS }}
-
+          SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/${{ secrets.MYSQL_DATABASE }}
+          SPRING_DATASOURCE_USERNAME: ${{ secrets.MYSQL_USER }}
+          SPRING_DATASOURCE_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+          JWT_SECRET: ${{secrets.JWT_SECRET}}
 
 
       - name: Log in to Docker Hub
