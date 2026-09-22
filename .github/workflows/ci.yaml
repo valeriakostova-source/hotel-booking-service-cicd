@@ -24,8 +24,8 @@ jobs:
       mysql:
         image: mysql:8
         env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: Booking-service
+          MYSQL_ROOT_PASSWORD: ${{secrets.MYSQL_ROOT_PASSWORD}}
+          MYSQL_DATABASE: ${{secrets.MYSQL_DATABASE}}
         ports:
           - 3306:3306
         options:
