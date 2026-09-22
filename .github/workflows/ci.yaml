@@ -23,6 +23,8 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: ${{secrets.MYSQL_ROOT_PASSWORD}}
           MYSQL_DATABASE: ${{secrets.MYSQL_DATABASE}}
+          BOOKING_DB_USER: ${{secrets.BOOKING_DB_USER}}
+          BOOKING_DB_PASS: ${{secrets.BOOKING_DB_PASS}}
         ports:
           - 3306:3306
         options:
@@ -32,20 +34,7 @@ jobs:
           --health-retries=10
 
     steps:
-#      #Docker compose starts
-#      - name: Start docker system
-#        run: docker compose up -d --build
 #
-#      - name: Sleep 30 s
-#        run: sleep 30
-#
-#      - name: test endpoint i booking service
-#        run: curl -f http://localhost:8082/api/reservation
-#
-#      - name: shut down
-#        if: always()
-#        run: docker compose down -v
-
       #Checkout code
       - name: Check out code
         uses: actions/checkout@v4
@@ -60,7 +49,24 @@ jobs:
       - name: Build and run tests
         run: mvn -B package
         env:
-          SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/${{secrets.DATABASE_NAME}}
-          BOOKING_DB_USER: ${{secrets.BOOKING_DB_USER}}
-          BOOKING_DB_PASS: ${{secrets.BOOKING_DB_PASS}}
-          JWT_SECRET: ${{secrets.JWT_SECRET}}
+            SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/${{ secrets.MYSQL_DATABASE }}
+            BOOKING_DB_USER: ${{ secrets.BOOKING_DB_USER }}
+            BOOKING_DB_PASS: ${{ secrets.BOOKING_DB_PASS }}
+            JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{secrets.DOCKER_HUB_USERNAME}}
+          password: ${{ secrets.DOCKER_HUB_SECRET }}
+
+      - name: Build and push Docker image
+        run:
+          docker buildx build \
+          --platform linux/amd64,linux/arm64 \
+          -t valeriakostova/customer-service-cicd:1.0 \
+          --push .
+
+
+
