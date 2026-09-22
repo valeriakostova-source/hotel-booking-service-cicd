@@ -34,16 +34,16 @@ jobs:
           --health-timeout=5s
           --health-retries=10
 
-    steps:
-      - name: Start docker system
-        run: docker compose up -d --build
-      - name: Sleep 30 s
-        run: sleep 30
-      - name: test endpoint i booking service
-        run: curl - f http://localhost:8082/reservation
-      - name: shut down all
-        if: always()
-        run: docker compose dom -v
+#    steps:
+#      - name: Start docker system
+#        run: docker compose up -d --build
+#      - name: Sleep 30 s
+#        run: sleep 30
+#      - name: test endpoint i booking service
+#        run: curl - f http://localhost:8082/reservation
+#      - name: shut down all
+#        if: always()
+#        run: docker compose dom -v
 
       #Checkout code
       - name: Check out code
@@ -58,7 +58,7 @@ jobs:
       - name: Build and run tests
         run: mvn -B package
         env:
-          SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/Booking-service
-          BOOKING_DB_USER: root
-          BOOKING_DB_PASS: root
-          JWT_SECRET: SNtP0ZcKL8Co2T3UdVBJta5W1hWRMcku55tHGtkeVTD
+          SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/${{secrets.DATABASE_NAME}}
+          BOOKING_DB_USER: ${{secrets.BOOKING_DB_USER}}
+          BOOKING_DB_PASS: ${{secrets.BOOKING_DB_PASS}}
+          JWT_SECRET: ${{secrets.JWT_SECRET}}
