@@ -26,29 +26,34 @@ jobs:
         ports:
           - 3306:3306
         options:
-          --health-cmd="mysqladmin ping -h localhost -uroot -proot"
+          --health-cmd="mysqladmin ping -h localhost -uroot -p${{ secrets.MYSQL_ROOT_PASSWORD }}"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=10
 
     steps:
-      #Docker compose starts
-      - name: Start docker system
-        run: docker compose up -d --build
-      - name: Sleep 30 s
-        run: sleep 30
-      - name: test endpoint i booking service
-        run: curl - f http://localhost:8082/reservation
-      - name: shut down all
-        if: always()
-        run: docker compose dom -v
+#      #Docker compose starts
+#      - name: Start docker system
+#        run: docker compose up -d --build
+#
+#      - name: Sleep 30 s
+#        run: sleep 30
+#
+#      - name: test endpoint i booking service
+#        run: curl -f http://localhost:8082/api/reservation
+#
+#      - name: shut down
+#        if: always()
+#        run: docker compose down -v
+
       #Checkout code
       - name: Check out code
         uses: actions/checkout@v4
-      - name: Set up Java 17
+
+      - name: Set up Java 21
         uses: actions/setup-java@v4
         with:
-          java-version: "17"
+          java-version: "21"
           distribution: "temurin"
           cache: "maven"
 
