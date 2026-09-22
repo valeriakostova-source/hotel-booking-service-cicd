@@ -25,7 +25,7 @@ import service.booking.dto.UpdateDto;
 public class ConnectionController {
     private final RestClient restClient;
 
-    public ConnectionController(@Value("${REVIEW_DB_CLIENT_URL:http://customer-service:8081}") String baseUrl) {
+    public ConnectionController(@Value("${CUSTOMER_CLIENT_URL:http://customer-service:8081}") String baseUrl) {
         this.restClient = RestClient
                 .builder()
                 .baseUrl(baseUrl)
