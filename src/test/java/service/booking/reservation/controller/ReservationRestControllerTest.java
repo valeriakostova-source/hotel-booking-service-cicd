@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import service.booking.customerapi.client.CustomerClient;
+import service.booking.reservation.repository.ReservationRepository;
 import service.booking.roomapi.entity.Room;
 import service.booking.roomapi.repository.RoomRepository;
 
@@ -20,12 +21,16 @@ import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
+
+
+@SpringBootTest(properties = {
+       })
 @AutoConfigureMockMvc
 public class ReservationRestControllerTest {
 
@@ -36,6 +41,9 @@ public class ReservationRestControllerTest {
     private RoomRepository roomRepository;
 
     @Autowired
+    private ReservationRepository reservationRepository;
+
+    @Autowired
     private MockMvc mockMvc;
 
     @Value("${JWT_SECRET}")
@@ -43,8 +51,11 @@ public class ReservationRestControllerTest {
 
     @BeforeEach
     public void cleanupDb() {
+        reservationRepository.deleteAll();
         roomRepository.deleteAll();
     }
+
+
 
     @Test
     public void createReservationTest() throws Exception {
@@ -60,6 +71,7 @@ public class ReservationRestControllerTest {
                            "guests": 1
                          }
                 """.replace("{roomId}", room.getId().toString());
+        
 
         mockMvc.perform(post("/api/reservation")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -68,10 +80,13 @@ public class ReservationRestControllerTest {
                 )
                 .andExpect(status().isCreated());
 
-        verify(customerClient).customerExists(any());
-    }
+        assertEquals (1, reservationRepository.count());
 
-    public String generateToken(Long userId) {
+        verify(customerClient).customerExists(any());
+
+    }
+    
+        public String generateToken(Long userId) {
         return Jwts.builder()
                 .subject(String.valueOf(userId))
                 .issuedAt(new Date())
