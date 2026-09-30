@@ -43,11 +43,13 @@ public class ConnectionController {
                     .toEntity(Object.class)
             );
         } catch (HttpClientErrorException e) {
+            e.printStackTrace();
             return (ResponseEntity
                     .status(400)
                     .body(e.getResponseBodyAsString())
             );
         } catch (Exception e) {
+            e.printStackTrace();
             return (ResponseEntity
                     .status(503)
                     .body(e.getCause())
@@ -66,11 +68,13 @@ public class ConnectionController {
                     .toEntity(String.class)
             );
         } catch (HttpClientErrorException e) {
+            e.printStackTrace();
             return (ResponseEntity
                     .status(400)
                     .body(e.getResponseBodyAsString())
             );
         } catch (Exception e) {
+            e.printStackTrace();
             return (ResponseEntity
                     .status(503)
                     .body(e.getCause())
@@ -90,11 +94,13 @@ public class ConnectionController {
                     .toEntity(CustomerInfo.class)
             );
         } catch (HttpClientErrorException e) {
+            e.printStackTrace();
             return (ResponseEntity
                     .status(400)
                     .body(e.getResponseBodyAsString())
             );
         } catch (Exception e) {
+            e.printStackTrace();
             return (ResponseEntity
                     .status(503)
                     .body(e.getCause())
@@ -115,11 +121,13 @@ public class ConnectionController {
                     .toEntity(Object.class)
             );
         } catch (HttpClientErrorException e) {
+            e.printStackTrace();
             return (ResponseEntity
                     .status(400)
                     .body(e.getResponseBodyAsString())
             );
         } catch (Exception e) {
+            e.printStackTrace();
             return (ResponseEntity
                     .status(503)
                     .body(e.getCause())
@@ -139,11 +147,13 @@ public class ConnectionController {
                     .toEntity(Object.class)
             );
         } catch (HttpClientErrorException e) {
+            e.printStackTrace();
             return (ResponseEntity
                     .status(400)
                     .body(e.getResponseBodyAsString())
             );
         } catch (Exception e) {
+            e.printStackTrace();
             return (ResponseEntity
                     .status(503)
                     .body(e.getCause())

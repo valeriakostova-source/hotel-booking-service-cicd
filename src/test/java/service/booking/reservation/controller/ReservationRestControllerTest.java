@@ -27,10 +27,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
-
-@SpringBootTest(properties = {
-       })
+@SpringBootTest
 @AutoConfigureMockMvc
 public class ReservationRestControllerTest {
 
@@ -71,7 +68,7 @@ public class ReservationRestControllerTest {
                            "guests": 1
                          }
                 """.replace("{roomId}", room.getId().toString());
-        
+
 
         mockMvc.perform(post("/api/reservation")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -85,7 +82,7 @@ public class ReservationRestControllerTest {
         verify(customerClient).customerExists(any());
 
     }
-    
+
         public String generateToken(Long userId) {
         return Jwts.builder()
                 .subject(String.valueOf(userId))
